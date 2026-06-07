@@ -350,6 +350,38 @@
   }
   .yt-link:hover { transform:scale(1.1); }
   .purpose-note { margin:0 14px 12px; padding:10px 12px; background:var(--surface2); border-radius:8px; font-size:12px; color:var(--text-muted); border-left:2px solid var(--accent); opacity:0.8; }
+  /* ===== WEEKLY SCHEDULE ===== */
+  .weekly-card { margin-bottom:18px; }
+  .weekly-summary {
+    display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px;
+  }
+  .week-grid {
+    display:grid; grid-template-columns:repeat(7,1fr); gap:8px;
+  }
+  .week-card {
+    background:var(--surface2); border:1px solid var(--border); border-radius:10px;
+    padding:10px 8px; min-height:118px; display:flex; flex-direction:column; gap:6px;
+    transition:transform 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .week-card.train { border-color:var(--primary); background:var(--sel-bg); }
+  .week-card.rest { opacity:0.88; }
+  .week-card:hover { transform:translateY(-2px); }
+  .week-day {
+    width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:900; background:var(--surface3); border:1px solid var(--border);
+  }
+  .week-card.train .week-day { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; border-color:var(--primary); }
+  .week-card.rest .week-day { background:var(--surface3); color:var(--text-muted); }
+  .week-status { font-size:12px; font-weight:800; }
+  .week-detail { font-size:11px; color:var(--text-muted); line-height:1.35; }
+  .week-intensity {
+    display:inline-flex; align-items:center; gap:3px; width:max-content;
+    font-size:10px; font-weight:800; padding:2px 7px; border-radius:999px;
+    border:1px solid var(--border); background:var(--surface);
+  }
+  .week-intensity.high { color:var(--danger); border-color:rgba(255,61,61,0.35); background:rgba(255,61,61,0.10); }
+  .week-intensity.medium { color:var(--accent-light); border-color:var(--badge-a-border); background:var(--badge-a-bg); }
+  .week-intensity.light { color:var(--success); border-color:var(--badge-s-border); background:var(--badge-s-bg); }
   /* ===== WELCOME ===== */
   .welcome-hero { width:140px; height:140px; border-radius:50%; background:var(--hero-bg); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:64px; }
   .feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0 28px; text-align:left; }
@@ -383,6 +415,8 @@
     .photo-grid.cols3 { grid-template-columns:1fr 1fr; }
     .stats-grid { grid-template-columns:1fr 1fr; }
     .feature-grid { grid-template-columns:1fr; }
+    .week-grid { grid-template-columns:1fr 1fr; }
+    .week-card { min-height:auto; }
   }
 </style>
 </head>
@@ -1100,34 +1134,145 @@ function buildDayPlans() {
   return { plans, cardioLabel };
 }
 
+// ===== WEEKLY SCHEDULE =====
+const WEEKDAY_LABELS = ['月','火','水','木','金','土','日'];
+const TRAINING_DAY_PATTERNS = {
+  1:[2],
+  2:[1,5],
+  3:[0,2,5],
+  4:[0,1,3,5],
+  5:[0,1,3,4,5],
+  6:[0,1,2,3,4,5],
+  7:[0,1,2,3,4,5,6]
+};
+
+function calcWorkoutIntensity(plan) {
+  let score = 1;
+  if (S.experience === 'intermediate') score += 1;
+  if (S.experience === 'advanced') score += 2;
+  if (S.hoursPerDay >= 1.5) score += 1;
+  if (S.purpose === 'hypertrophy' || S.purpose === 'sports') score += 1;
+  if (plan.label.includes('脚') || plan.label.includes('背中') || plan.label.includes('パワー')) score += 1;
+  if (plan.exercises && plan.exercises.some(ex => ['スクワット','デッドリフト','ブルガリアンスクワット','ベンチプレス','懸垂'].includes(ex))) score += 1;
+
+  if (score >= 5) return { key:'high', className:'high', label:'高強度', icon:'🔥' };
+  if (score >= 3) return { key:'medium', className:'medium', label:'中強度', icon:'⚡' };
+  return { key:'light', className:'light', label:'軽め', icon:'🌿' };
+}
+
+function nearestTraining(schedule, start, step) {
+  for (let i = start; i >= 0 && i < schedule.length; i += step) {
+    if (schedule[i].type === 'train') return schedule[i];
+  }
+  return null;
+}
+
+function buildRestAdvice(schedule, index) {
+  const prev = nearestTraining(schedule, index - 1, -1);
+  const next = nearestTraining(schedule, index + 1, 1);
+
+  if (prev && prev.intensity.key === 'high') {
+    return {
+      reason: `${prev.weekday}曜の高強度メニュー後の回復日`,
+      detail: '🛌 筋肉痛や関節疲労を抜く日。散歩・ストレッチ・睡眠を優先しましょう'
+    };
+  }
+  if (next && next.intensity.key === 'high') {
+    return {
+      reason: `${next.weekday}曜の高強度メニューに備える調整日`,
+      detail: '😴 追い込みすぎず、炭水化物とタンパク質をしっかり取りましょう'
+    };
+  }
+  if (prev && (prev.label.includes('脚') || prev.label.includes('背中'))) {
+    return {
+      reason: '大きな筋群を使った後のレスト',
+      detail: '🚶 軽い有酸素やストレッチで血流を促し、疲労回復を狙いましょう'
+    };
+  }
+  return {
+    reason: '疲労をためないためのレスト',
+    detail: '🌿 完全休養または軽い散歩・ストレッチがおすすめです'
+  };
+}
+
+function buildWeeklySchedule(plans) {
+  const trainIndexes = TRAINING_DAY_PATTERNS[plans.length] || TRAINING_DAY_PATTERNS[3];
+  const schedule = WEEKDAY_LABELS.map((weekday, i) => ({ weekday, type:'rest' }));
+
+  trainIndexes.forEach((dayIndex, order) => {
+    const plan = plans[order];
+    const intensity = calcWorkoutIntensity(plan);
+    schedule[dayIndex] = {
+      ...plan,
+      weekday: WEEKDAY_LABELS[dayIndex],
+      type:'train',
+      trainingNo: order + 1,
+      intensity
+    };
+  });
+
+  schedule.forEach((day, i) => {
+    if (day.type === 'rest') {
+      const advice = buildRestAdvice(schedule, i);
+      day.restReason = advice.reason;
+      day.restDetail = advice.detail;
+    }
+  });
+
+  return schedule;
+}
+
+function renderWeeklyScheduleHTML(schedule) {
+  const trainText = schedule.filter(d => d.type === 'train').map(d => `${d.weekday}曜`).join('・');
+  const restText = schedule.filter(d => d.type === 'rest').map(d => `${d.weekday}曜`).join('・') || 'なし';
+
+  return `
+    <div class="card weekly-card">
+      <div class="card-title">🗓️ 週間スケジュール</div>
+      <div class="card-sub">トレーニング強度に合わせて、筋トレ日とレスト日を曜日ごとに配置しました</div>
+      <div class="weekly-summary">
+        <span class="badge badge-s">🏋️ 筋トレ：${trainText}</span>
+        <span class="badge">🛌 休み：${restText}</span>
+      </div>
+      <div class="week-grid">
+        ${schedule.map(day => {
+          if (day.type === 'train') {
+            return `<div class="week-card train">
+              <div class="week-day">${day.weekday}</div>
+              <div class="week-status">筋トレ</div>
+              <div class="week-intensity ${day.intensity.className}">${day.intensity.icon} ${day.intensity.label}</div>
+              <div class="week-detail">D${day.trainingNo}：${day.label}</div>
+            </div>`;
+          }
+          return `<div class="week-card rest">
+            <div class="week-day">${day.weekday}</div>
+            <div class="week-status">レスト</div>
+            <div class="week-detail">${day.restReason}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="tip-box">
+        <span class="ti">💡</span>
+        <span>週3日の場合は月・水・土のように間隔を空け、脚・背中・高強度メニューの後には回復日を置く設計にしています。</span>
+      </div>
+    </div>
+  `;
+}
+
 function renderResult() {
   const { plans, cardioLabel } = buildDayPlans();
   const scheme = REP_SCHEMES[S.purpose][S.experience];
   const bmi = (S.weight / Math.pow(S.height/100, 2)).toFixed(1);
   const trainDays = plans.length;
-  const cycleDays = trainDays <= 3 ? 3 : trainDays <= 5 ? 5 : 7;
+  const weeklySchedule = buildWeeklySchedule(plans);
   const skelLabels = {natural:'ナチュラル', straight:'ストレート', wave:'ウェーブ'};
   const purpLabels  = {hypertrophy:'筋肥大', diet:'ダイエット', health:'健康維持', sports:'スポーツ向上'};
   const expLabels   = {beginner:'初心者', intermediate:'中級者', advanced:'上級者'};
 
-  // Interleave rest days
-  const allDays = [];
-  let ti = 0;
-  for (let i=0; i<cycleDays; i++) {
-    if (ti < trainDays && ((i * trainDays) / cycleDays >= ti || i === Math.floor(i * cycleDays / trainDays))) {
-      allDays.push({ type:'train', ...plans[ti++] });
-    } else {
-      allDays.push({ type:'rest' });
-    }
-  }
-  while (allDays.filter(d=>d.type==='train').length < trainDays) {
-    allDays.push({ type:'train', ...plans[ti++] });
-  }
-
   let html = `
     <div class="result-hero">
       <h2>🎉 トレーニングメニューが完成しました！</h2>
-      <p>${cycleDays}日サイクル・週${trainDays}日のプランです</p>
+      <p>1週間の曜日固定プラン・週${trainDays}日のトレーニングです</p>
       <div class="badges">
         <span class="badge badge-p">🎯 ${purpLabels[S.purpose]}</span>
         <span class="badge badge-a">🦴 ${skelLabels[S.skelType]||'-'}</span>
@@ -1165,22 +1310,23 @@ function renderResult() {
     </div>
   `;
 
-  allDays.forEach((day, i) => {
-    const dn = i + 1;
+  html += renderWeeklyScheduleHTML(weeklySchedule);
+
+  weeklySchedule.forEach((day, i) => {
     if (day.type === 'rest') {
       html += `<div class="day-block">
         <div class="day-hdr">
-          <div class="day-num" style="background:linear-gradient(135deg,#444,#333)">D${dn}</div>
-          <div class="day-info"><h3>Day ${dn}：休息日</h3><p>回復を促しましょう</p></div>
+          <div class="day-num" style="background:linear-gradient(135deg,#444,#333)">${day.weekday}</div>
+          <div class="day-info"><h3>${day.weekday}曜日：レスト</h3><p>${day.restReason}</p></div>
         </div>
-        <div class="rest-day">🛌 アクティブレスト — 軽いストレッチや散歩が効果的です</div>
+        <div class="rest-day">${day.restDetail}</div>
       </div>`;
     } else {
       const exs = day.exercises || [];
       html += `<div class="day-block">
         <div class="day-hdr">
-          <div class="day-num">D${dn}</div>
-          <div class="day-info"><h3>Day ${dn}：${day.label}</h3><p>${exs.length}種目 · ${scheme.sets}セット × ${scheme.reps}</p></div>
+          <div class="day-num">${day.weekday}</div>
+          <div class="day-info"><h3>${day.weekday}曜日：${day.label}</h3><p>D${day.trainingNo} · ${day.intensity.label} · ${exs.length}種目 · ${scheme.sets}セット × ${scheme.reps}</p></div>
         </div>
         <div class="exercise-list">
           ${exs.map(ex => {
