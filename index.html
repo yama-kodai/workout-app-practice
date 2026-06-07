@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>筋トレメニュー提案アプリ</title>
+<style>
+  /* ===== THEMES ===== */
+  body[data-theme="dark"] {
+    --primary:#1a73e8; --primary-dark:#1557b0; --primary-glow:rgba(26,115,232,0.3);
+    --accent:#ff6d00; --accent-light:#ff8f00; --accent-glow:rgba(255,109,0,0.3);
+    --bg:#0d0d0d; --surface:#1a1a1a; --surface2:#252525; --surface3:#2e2e2e;
+    --border:#3a3a3a; --text:#f0f0f0; --text-muted:#888; --text-inv:#111;
+    --success:#00c853; --warning:#ffab00; --danger:#ff3d3d;
+    --card-shadow:0 4px 20px rgba(0,0,0,0.5);
+    --sel-bg:rgba(26,115,232,0.12); --sel-sub:rgba(240,240,240,0.7);
+    --skel-sel:rgba(255,109,0,0.12); --tip-bg:rgba(26,115,232,0.08); --tip-border:rgba(26,115,232,0.2);
+    --tip-color:rgba(240,240,240,0.75); --badge-p-bg:rgba(26,115,232,0.15); --badge-p-border:rgba(26,115,232,0.3);
+    --badge-a-bg:rgba(255,109,0,0.15); --badge-a-border:rgba(255,109,0,0.3);
+    --badge-s-bg:rgba(0,200,83,0.15); --badge-s-border:rgba(0,200,83,0.3);
+    --ex-hover:rgba(26,115,232,0.05); --ex-border:rgba(58,58,58,0.5);
+    --photo-hover-shadow:0 6px 20px rgba(26,115,232,0.3);
+    --hero-bg:linear-gradient(135deg,rgba(26,115,232,0.15),rgba(255,109,0,0.10));
+  }
+  body[data-theme="light"] {
+    --primary:#1558d6; --primary-dark:#0d44b0; --primary-glow:rgba(21,88,214,0.15);
+    --accent:#e05500; --accent-light:#f07000; --accent-glow:rgba(224,85,0,0.15);
+    --bg:#f0f2f5; --surface:#ffffff; --surface2:#f7f8fa; --surface3:#eef0f4;
+    --border:#d8dce4; --text:#111827; --text-muted:#6b7280; --text-inv:#fff;
+    --success:#059669; --warning:#d97706; --danger:#dc2626;
+    --card-shadow:0 2px 12px rgba(0,0,0,0.08);
+    --sel-bg:rgba(21,88,214,0.08); --sel-sub:rgba(17,24,39,0.7);
+    --skel-sel:rgba(224,85,0,0.08); --tip-bg:rgba(21,88,214,0.06); --tip-border:rgba(21,88,214,0.15);
+    --tip-color:rgba(17,24,39,0.7); --badge-p-bg:rgba(21,88,214,0.10); --badge-p-border:rgba(21,88,214,0.25);
+    --badge-a-bg:rgba(224,85,0,0.10); --badge-a-border:rgba(224,85,0,0.25);
+    --badge-s-bg:rgba(5,150,105,0.10); --badge-s-border:rgba(5,150,105,0.25);
+    --ex-hover:rgba(21,88,214,0.04); --ex-border:rgba(216,220,228,0.5);
+    --photo-hover-shadow:0 6px 20px rgba(21,88,214,0.2);
+    --hero-bg:linear-gradient(135deg,rgba(21,88,214,0.08),rgba(224,85,0,0.06));
+  }
+  body[data-theme="ocean"] {
+    --primary:#00b4d8; --primary-dark:#0096b4; --primary-glow:rgba(0,180,216,0.3);
+    --accent:#f77f00; --accent-light:#faad3d; --accent-glow:rgba(247,127,0,0.3);
+    --bg:#03111f; --surface:#071a2e; --surface2:#0a2540; --surface3:#0d2f50;
+    --border:#1a3f5c; --text:#e8f4fd; --text-muted:#7aaccc; --text-inv:#03111f;
+    --success:#06d6a0; --warning:#ffd166; --danger:#ef476f;
+    --card-shadow:0 4px 20px rgba(0,0,0,0.6);
+    --sel-bg:rgba(0,180,216,0.12); --sel-sub:rgba(232,244,253,0.7);
+    --skel-sel:rgba(247,127,0,0.12); --tip-bg:rgba(0,180,216,0.08); --tip-border:rgba(0,180,216,0.2);
+    --tip-color:rgba(232,244,253,0.75); --badge-p-bg:rgba(0,180,216,0.15); --badge-p-border:rgba(0,180,216,0.3);
+    --badge-a-bg:rgba(247,127,0,0.15); --badge-a-border:rgba(247,127,0,0.3);
+    --badge-s-bg:rgba(6,214,160,0.15); --badge-s-border:rgba(6,214,160,0.3);
+    --ex-hover:rgba(0,180,216,0.05); --ex-border:rgba(26,63,92,0.5);
+    --photo-hover-shadow:0 6px 20px rgba(0,180,216,0.3);
+    --hero-bg:linear-gradient(135deg,rgba(0,180,216,0.15),rgba(247,127,0,0.10));
+  }
+  body[data-theme="forest"] {
+    --primary:#4ade80; --primary-dark:#22c55e; --primary-glow:rgba(74,222,128,0.25);
+    --accent:#fbbf24; --accent-light:#fcd34d; --accent-glow:rgba(251,191,36,0.25);
+    --bg:#0a0f0a; --surface:#0f1f10; --surface2:#162917; --surface3:#1c3520;
+    --border:#2d4d2f; --text:#ecfdf5; --text-muted:#6ee7b7; --text-inv:#0a0f0a;
+    --success:#4ade80; --warning:#fbbf24; --danger:#f87171;
+    --card-shadow:0 4px 20px rgba(0,0,0,0.6);
+    --sel-bg:rgba(74,222,128,0.12); --sel-sub:rgba(236,253,245,0.7);
+    --skel-sel:rgba(251,191,36,0.12); --tip-bg:rgba(74,222,128,0.08); --tip-border:rgba(74,222,128,0.2);
+    --tip-color:rgba(236,253,245,0.75); --badge-p-bg:rgba(74,222,128,0.15); --badge-p-border:rgba(74,222,128,0.3);
+    --badge-a-bg:rgba(251,191,36,0.15); --badge-a-border:rgba(251,191,36,0.3);
+    --badge-s-bg:rgba(74,222,128,0.15); --badge-s-border:rgba(74,222,128,0.3);
+    --ex-hover:rgba(74,222,128,0.05); --ex-border:rgba(45,77,47,0.5);
+    --photo-hover-shadow:0 6px 20px rgba(74,222,128,0.25);
+    --hero-bg:linear-gradient(135deg,rgba(74,222,128,0.12),rgba(251,191,36,0.08));
+  }
+  body[data-theme="crimson"] {
+    --primary:#f43f5e; --primary-dark:#e11d48; --primary-glow:rgba(244,63,94,0.3);
+    --accent:#fb923c; --accent-light:#fdba74; --accent-glow:rgba(251,146,60,0.3);
+    --bg:#0d0508; --surface:#1a080e; --surface2:#230b14; --surface3:#2c0e1b;
+    --border:#4a1528; --text:#fff0f3; --text-muted:#fda4af; --text-inv:#0d0508;
+    --success:#4ade80; --warning:#fbbf24; --danger:#ff6b6b;
+    --card-shadow:0 4px 20px rgba(0,0,0,0.6);
+    --sel-bg:rgba(244,63,94,0.12); --sel-sub:rgba(255,240,243,0.7);
+    --skel-sel:rgba(251,146,60,0.12); --tip-bg:rgba(244,63,94,0.08); --tip-border:rgba(244,63,94,0.2);
+    --tip-color:rgba(255,240,243,0.75); --badge-p-bg:rgba(244,63,94,0.15); --badge-p-border:rgba(244,63,94,0.3);
+    --badge-a-bg:rgba(251,146,60,0.15); --badge-a-border:rgba(251,146,60,0.3);
+    --badge-s-bg:rgba(74,222,128,0.15); --badge-s-border:rgba(74,222,128,0.3);
+    --ex-hover:rgba(244,63,94,0.05); --ex-border:rgba(74,21,40,0.5);
+    --photo-hover-shadow:0 6px 20px rgba(244,63,94,0.3);
+    --hero-bg:linear-gradient(135deg,rgba(244,63,94,0.15),rgba(251,146,60,0.10));
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Meiryo',sans-serif;
+    background:var(--bg); color:var(--text); min-height:100vh; line-height:1.6;
+    transition:background 0.3s,color 0.3s;
+  }
+  /* ===== LAYOUT ===== */
+  .app-wrapper { max-width:720px; margin:0 auto; padding:0 16px 100px; }
+  .app-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 0 12px; position:sticky; top:0; background:var(--bg);
+    z-index:50; border-bottom:1px solid var(--border); margin-bottom:24px;
+  }
+  .app-logo { display:flex; align-items:center; gap:10px; }
+  .app-logo-icon { font-size:28px; }
+  .app-logo h1 { font-size:16px; font-weight:800; }
+  .app-header-actions { display:flex; gap:8px; align-items:center; }
+  .icon-btn {
+    width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+    background:var(--surface2); color:var(--text); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:16px;
+    transition:all 0.2s;
+  }
+  .icon-btn:hover { background:var(--surface3); border-color:var(--primary); }
+  /* ===== THEME PICKER ===== */
+  .theme-modal {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6);
+    z-index:200; align-items:center; justify-content:center; padding:16px;
+  }
+  .theme-modal.open { display:flex; }
+  .theme-panel {
+    background:var(--surface); border:1px solid var(--border); border-radius:16px;
+    padding:24px; width:100%; max-width:400px;
+  }
+  .theme-panel h3 { margin-bottom:16px; font-size:16px; }
+  .theme-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .theme-opt {
+    border-radius:10px; border:2px solid var(--border); overflow:hidden;
+    cursor:pointer; transition:all 0.2s;
+  }
+  .theme-opt:hover,.theme-opt.active { border-color:var(--primary); }
+  .theme-swatch { height:60px; display:flex; }
+  .theme-swatch span { flex:1; }
+  .theme-name { padding:8px; font-size:13px; font-weight:600; text-align:center; }
+  /* ===== PROGRESS ===== */
+  .progress-wrap { margin-bottom:28px; }
+  .progress-track {
+    height:4px; background:var(--surface2); border-radius:2px; overflow:hidden; margin-bottom:10px;
+  }
+  .progress-fill {
+    height:100%; background:linear-gradient(90deg,var(--primary),var(--accent));
+    border-radius:2px; transition:width 0.4s ease;
+  }
+  .progress-label { font-size:12px; color:var(--text-muted); text-align:right; }
+  /* ===== CARDS ===== */
+  .card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:24px; margin-bottom:20px;
+    box-shadow:var(--card-shadow);
+  }
+  .card-title { font-size:17px; font-weight:800; margin-bottom:4px; }
+  .card-sub { font-size:13px; color:var(--text-muted); margin-bottom:20px; }
+  /* ===== SAVED PROFILE BANNER ===== */
+  .saved-banner {
+    background:var(--surface); border:1px solid var(--primary);
+    border-radius:12px; padding:16px; margin-bottom:20px;
+    display:none;
+  }
+  .saved-banner.show { display:block; }
+  .saved-banner h4 { font-size:14px; font-weight:700; margin-bottom:8px; color:var(--primary); }
+  .saved-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .saved-tag {
+    font-size:12px; padding:3px 10px; border-radius:20px;
+    background:var(--surface2); border:1px solid var(--border);
+  }
+  .saved-banner-btns { display:flex; gap:8px; }
+  /* ===== FORMS ===== */
+  .form-row { margin-bottom:18px; }
+  .form-label {
+    display:block; font-size:12px; font-weight:700; color:var(--text-muted);
+    margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;
+  }
+  .form-required { color:var(--accent); margin-left:3px; }
+  .form-input {
+    width:100%; padding:12px 14px; background:var(--surface2);
+    border:1px solid var(--border); border-radius:10px;
+    color:var(--text); font-size:15px; outline:none; appearance:none;
+    font-family:inherit; transition:border-color 0.2s,box-shadow 0.2s;
+  }
+  .form-input:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-glow); }
+  .input-group { display:flex; align-items:center; gap:8px; }
+  .input-unit { font-size:14px; color:var(--text-muted); white-space:nowrap; }
+  .form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  /* ===== OPTION CARDS ===== */
+  .option-grid { display:grid; gap:10px; }
+  .option-grid.cols2 { grid-template-columns:1fr 1fr; }
+  .option-grid.cols3 { grid-template-columns:1fr 1fr 1fr; }
+  .option-card {
+    background:var(--surface2); border:2px solid var(--border); border-radius:10px;
+    padding:14px 12px; cursor:pointer; transition:all 0.2s; text-align:center; user-select:none;
+  }
+  .option-card:hover { border-color:var(--primary); background:var(--surface3); }
+  .option-card.selected { border-color:var(--primary); background:var(--sel-bg); }
+  .option-icon { font-size:26px; display:block; margin-bottom:5px; }
+  .option-title { font-size:14px; font-weight:700; }
+  .option-sub { font-size:11px; color:var(--text-muted); margin-top:3px; }
+  .option-card.selected .option-sub { color:var(--sel-sub); }
+  /* ===== SKELETON Q ===== */
+  .skel-q { margin-bottom:18px; }
+  .skel-q-title {
+    font-size:13px; font-weight:700; margin-bottom:10px; padding:8px 12px;
+    background:var(--surface2); border-left:3px solid var(--accent); border-radius:0 8px 8px 0;
+  }
+  .skel-opts { display:flex; gap:8px; flex-wrap:wrap; }
+  .skel-opt {
+    flex:1; min-width:90px; background:var(--surface2); border:2px solid var(--border);
+    border-radius:8px; padding:10px 10px; cursor:pointer; text-align:center;
+    font-size:13px; transition:all 0.2s; user-select:none;
+  }
+  .skel-opt:hover { border-color:var(--accent); }
+  .skel-opt.selected { border-color:var(--accent); background:var(--skel-sel); }
+  /* ===== RANGE ===== */
+  .range-display { text-align:center; font-size:28px; font-weight:900; color:var(--primary); margin-bottom:4px; }
+  input[type="range"] {
+    width:100%; appearance:none; height:6px; background:var(--surface3);
+    border-radius:3px; outline:none; margin:8px 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    appearance:none; width:22px; height:22px; border-radius:50%;
+    background:var(--primary); cursor:pointer; box-shadow:0 0 8px var(--primary-glow);
+  }
+  .range-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); }
+  /* ===== BODY FAT INDICATOR ===== */
+  .bf-indicator {
+    margin-top:8px; padding:8px 12px; border-radius:8px; font-size:12px;
+    font-weight:600; display:flex; align-items:center; gap:6px;
+  }
+  .bf-low    { background:rgba(99,180,255,0.15); border:1px solid rgba(99,180,255,0.3); color:#63b4ff; }
+  .bf-normal { background:rgba(0,200,83,0.15);  border:1px solid rgba(0,200,83,0.3);  color:var(--success); }
+  .bf-high   { background:rgba(255,171,0,0.15); border:1px solid rgba(255,171,0,0.3); color:var(--warning); }
+  .bf-very-high { background:rgba(255,61,61,0.15); border:1px solid rgba(255,61,61,0.3); color:var(--danger); }
+  /* ===== PHOTO GRID ===== */
+  .photo-grid { display:grid; gap:12px; }
+  .photo-grid.cols2 { grid-template-columns:1fr 1fr; }
+  .photo-grid.cols3 { grid-template-columns:1fr 1fr 1fr; }
+  .photo-card {
+    background:var(--surface2); border:2px solid var(--border); border-radius:12px;
+    overflow:hidden; cursor:pointer; transition:all 0.2s; user-select:none;
+  }
+  .photo-card:hover { border-color:var(--primary); transform:translateY(-2px); box-shadow:0 6px 20px var(--primary-glow); }
+  .photo-card.selected { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-glow); }
+  .photo-img-wrap { position:relative; width:100%; aspect-ratio:3/4; overflow:hidden; }
+  .photo-img-wrap img {
+    width:100%; height:100%; object-fit:cover; object-position:top;
+    transition:transform 0.3s;
+  }
+  .photo-card:hover .photo-img-wrap img { transform:scale(1.03); }
+  .photo-fallback {
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    font-size:60px; background:var(--surface3);
+  }
+  .photo-check {
+    position:absolute; top:8px; right:8px; width:26px; height:26px;
+    border-radius:50%; background:var(--primary); display:none;
+    align-items:center; justify-content:center; font-size:13px;
+  }
+  .photo-card.selected .photo-check { display:flex; }
+  .photo-label { padding:10px 12px; }
+  .photo-label .ptitle { font-size:13px; font-weight:700; }
+  .photo-label .pdesc { font-size:11px; color:var(--text-muted); margin-top:2px; }
+  /* ===== BUTTONS ===== */
+  .btn {
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 24px; border-radius:10px; font-size:14px; font-weight:700;
+    cursor:pointer; transition:all 0.2s; border:none; font-family:inherit;
+  }
+  .btn-primary {
+    background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+    color:#fff; box-shadow:0 4px 14px var(--primary-glow);
+  }
+  .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px var(--primary-glow); }
+  .btn-secondary { background:var(--surface2); border:1px solid var(--border); color:var(--text); }
+  .btn-secondary:hover { background:var(--surface3); }
+  .btn-accent { background:linear-gradient(135deg,var(--accent),var(--accent-light)); color:#fff; box-shadow:0 4px 14px var(--accent-glow); }
+  .btn-accent:hover { transform:translateY(-1px); }
+  .btn-sm { padding:8px 16px; font-size:13px; border-radius:8px; }
+  .btn-full { width:100%; }
+  .btn-lg { padding:16px 28px; font-size:16px; }
+  .btn-nav { display:flex; gap:10px; justify-content:space-between; margin-top:24px; }
+  /* ===== ALERTS ===== */
+  .alert { display:none; padding:12px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; }
+  .alert-error { display:block; background:rgba(255,61,61,0.1); border:1px solid rgba(255,61,61,0.3); color:var(--danger); }
+  /* ===== TIP BOX ===== */
+  .tip-box {
+    background:var(--tip-bg);
+    border:1px solid var(--tip-border);
+    border-radius:8px; padding:12px 14px; font-size:13px;
+    color:var(--tip-color);
+    margin-top:14px; display:flex; gap:8px;
+  }
+  .tip-box .ti { font-size:15px; flex-shrink:0; margin-top:1px; }
+  /* ===== RESULT ===== */
+  .result-hero {
+    text-align:center; padding:28px 20px;
+    background:var(--hero-bg);
+    border:1px solid var(--border); border-radius:14px; margin-bottom:20px;
+  }
+  .result-hero h2 { font-size:20px; font-weight:800; margin-bottom:6px; }
+  .result-hero p { color:var(--text-muted); font-size:13px; }
+  .badges { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-top:14px; }
+  .badge {
+    display:inline-flex; align-items:center; gap:4px; padding:4px 12px;
+    border-radius:20px; font-size:11px; font-weight:700;
+    background:var(--surface2); border:1px solid var(--border);
+  }
+  .badge-p { background:var(--badge-p-bg); border-color:var(--badge-p-border); color:var(--primary); }
+  .badge-a { background:var(--badge-a-bg); border-color:var(--badge-a-border); color:var(--accent-light); }
+  .badge-s { background:var(--badge-s-bg); border-color:var(--badge-s-border); color:var(--success); }
+  .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
+  .stat-value { font-size:22px; font-weight:900; color:var(--primary); }
+  .stat-label { font-size:11px; color:var(--text-muted); margin-top:3px; }
+  .stat-note { font-size:10px; margin-top:4px; font-weight:600; }
+  /* ===== DAY BLOCKS ===== */
+  .day-block { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:14px; }
+  .day-hdr { padding:14px 18px; display:flex; align-items:center; gap:12px; background:var(--surface2); border-bottom:1px solid var(--border); }
+  .day-num {
+    width:40px; height:40px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800;
+  }
+  .day-info h3 { font-size:15px; font-weight:700; }
+  .day-info p { font-size:12px; color:var(--text-muted); margin-top:2px; }
+  .rest-day { padding:18px; text-align:center; color:var(--text-muted); font-size:14px; }
+  .exercise-list { padding:4px 0; }
+  .exercise-item {
+    display:flex; align-items:center; padding:11px 18px;
+    border-bottom:1px solid var(--ex-border);
+    transition:background 0.15s; gap:10px;
+  }
+  .exercise-item:last-child { border-bottom:none; }
+  .exercise-item:hover { background:var(--ex-hover); }
+  .ex-icon {
+    width:34px; height:34px; border-radius:8px; background:var(--surface2);
+    display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0;
+  }
+  .ex-name { flex:1; font-size:13px; font-weight:600; }
+  .ex-reps {
+    font-size:12px; font-weight:700; color:var(--accent-light);
+    background:var(--badge-a-bg);
+    padding:4px 10px; border-radius:20px;
+    border:1px solid var(--badge-a-border);
+    white-space:nowrap;
+  }
+  .yt-link {
+    display:flex; align-items:center; justify-content:center;
+    width:28px; height:28px; border-radius:6px;
+    background:#ff0000; color:#fff; font-size:11px; font-weight:700;
+    text-decoration:none; flex-shrink:0; transition:transform 0.2s; flex-direction:column;
+    line-height:1;
+  }
+  .yt-link:hover { transform:scale(1.1); }
+  .purpose-note { margin:0 14px 12px; padding:10px 12px; background:var(--surface2); border-radius:8px; font-size:12px; color:var(--text-muted); border-left:2px solid var(--accent); opacity:0.8; }
+  /* ===== WELCOME ===== */
+  .welcome-hero { width:140px; height:140px; border-radius:50%; background:var(--hero-bg); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:64px; }
+  .feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0 28px; text-align:left; }
+  .feature-item { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px; display:flex; gap:10px; }
+  .feature-item .fi { font-size:20px; flex-shrink:0; margin-top:2px; }
+  .feature-item h4 { font-size:12px; font-weight:700; margin-bottom:2px; }
+  .feature-item p { font-size:11px; color:var(--text-muted); line-height:1.4; }
+  /* ===== DIVIDER ===== */
+  .divider { height:1px; background:var(--border); margin:18px 0; }
+  /* ===== STEPS ===== */
+  .step { display:none; }
+  .step.active { display:block; }
+  /* ===== PRINT ===== */
+  @media print {
+    .app-header,.btn-nav,.theme-modal,.scroll-top { display:none !important; }
+    #step-result { display:block !important; }
+    body { background:#fff; color:#000; }
+  }
+  /* ===== SCROLL TOP ===== */
+  .scroll-top {
+    position:fixed; bottom:20px; right:20px; width:42px; height:42px;
+    border-radius:50%; background:var(--primary); color:#fff; border:none;
+    cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 16px var(--primary-glow); z-index:100; transition:transform 0.2s;
+  }
+  .scroll-top:hover { transform:translateY(-2px); }
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:480px) {
+    .form-grid-2 { grid-template-columns:1fr; }
+    .option-grid.cols3 { grid-template-columns:1fr 1fr; }
+    .photo-grid.cols3 { grid-template-columns:1fr 1fr; }
+    .stats-grid { grid-template-columns:1fr 1fr; }
+    .feature-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body data-theme="dark">
+
+<!-- THEME MODAL -->
+<div class="theme-modal" id="themeModal">
+  <div class="theme-panel">
+    <h3>🎨 デザインテーマを選択</h3>
+    <div class="theme-grid">
+      <div class="theme-opt" data-theme="dark" onclick="applyTheme('dark',this)">
+        <div class="theme-swatch"><span style="background:#0d0d0d"></span><span style="background:#1a73e8"></span><span style="background:#ff6d00"></span></div>
+        <div class="theme-name">ダーク</div>
+      </div>
+      <div class="theme-opt" data-theme="light" onclick="applyTheme('light',this)">
+        <div class="theme-swatch"><span style="background:#f0f2f5"></span><span style="background:#1558d6"></span><span style="background:#e05500"></span></div>
+        <div class="theme-name">ライト</div>
+      </div>
+      <div class="theme-opt" data-theme="ocean" onclick="applyTheme('ocean',this)">
+        <div class="theme-swatch"><span style="background:#03111f"></span><span style="background:#00b4d8"></span><span style="background:#f77f00"></span></div>
+        <div class="theme-name">オーシャン</div>
+      </div>
+      <div class="theme-opt" data-theme="forest" onclick="applyTheme('forest',this)">
+        <div class="theme-swatch"><span style="background:#0a0f0a"></span><span style="background:#4ade80"></span><span style="background:#fbbf24"></span></div>
+        <div class="theme-name">フォレスト</div>
+      </div>
+      <div class="theme-opt" data-theme="crimson" onclick="applyTheme('crimson',this)">
+        <div class="theme-swatch"><span style="background:#0d0508"></span><span style="background:#f43f5e"></span><span style="background:#fb923c"></span></div>
+        <div class="theme-name">クリムゾン</div>
+      </div>
+    </div>
+    <button class="btn btn-secondary btn-full" style="margin-top:14px" onclick="closeTheme()">閉じる</button>
+  </div>
+</div>
+
+<div class="app-wrapper">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="app-logo">
+      <span class="app-logo-icon">💪</span>
+      <h1>筋トレメニュー提案アプリ</h1>
+    </div>
+    <div class="app-header-actions">
+      <button class="icon-btn" onclick="openTheme()" title="テーマ変更">🎨</button>
+      <button class="icon-btn" id="profileBtn" onclick="openProfile()" title="プロフィール編集" style="display:none">👤</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap" style="display:none">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">ステップ 1 / 6</div>
+  </div>
+
+  <!-- STEP 0: WELCOME -->
+  <div class="step active" id="step-0">
+    <div style="text-align:center;padding:10px 0 20px">
+      <div class="welcome-hero">💪</div>
+    </div>
+    <!-- Saved profile banner -->
+    <div class="saved-banner" id="savedBanner">
+      <h4>✅ 保存されたプロフィールがあります</h4>
+      <div class="saved-tags" id="savedTags"></div>
+      <div class="saved-banner-btns">
+        <button class="btn btn-primary btn-sm" onclick="useSavedProfile()">保存データを使う</button>
+        <button class="btn btn-secondary btn-sm" onclick="ignoreSaved()">最初からやり直す</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="text-align:center;margin-bottom:8px">🎯 あなただけの筋トレメニューを作成</div>
+      <div class="card-sub" style="text-align:center">身体情報・目標・制約条件を入力するだけで最適なプランを自動生成します</div>
+      <div class="feature-grid">
+        <div class="feature-item"><span class="fi">📊</span><div><h4>身体情報の分析</h4><p>体重・身長・骨格タイプを考慮した個別プラン</p></div></div>
+        <div class="feature-item"><span class="fi">🗓️</span><div><h4>3〜7日サイクル</h4><p>空き時間に合わせた最適サイクル</p></div></div>
+        <div class="feature-item"><span class="fi">🏋️</span><div><h4>種目・レップ数の最適化</h4><p>目的・経験別のセット数・回数を自動計算</p></div></div>
+        <div class="feature-item"><span class="fi">📺</span><div><h4>YouTube フォーム解説</h4><p>各種目の正しい動作を動画で確認できます</p></div></div>
+      </div>
+      <button class="btn btn-accent btn-full btn-lg" onclick="startFresh()">▶ 診断をはじめる</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: BODY INFO -->
+  <div class="step" id="step-1">
+    <div class="card">
+      <div class="card-title">📋 基本情報の入力</div>
+      <div class="card-sub">現在の身体情報を入力してください。入力情報は端末に保存され、次回から省略できます</div>
+      <div id="alert-1" class="alert"></div>
+
+      <div class="form-row">
+        <label class="form-label">性別<span class="form-required">*</span></label>
+        <div class="option-grid cols2">
+          <div class="option-card" data-g="gender" data-v="male" onclick="sel(this)">
+            <span class="option-icon">👨</span><div class="option-title">男性</div>
+          </div>
+          <div class="option-card" data-g="gender" data-v="female" onclick="sel(this)">
+            <span class="option-icon">👩</span><div class="option-title">女性</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label" for="age">年齢<span class="form-required">*</span></label>
+        <div class="input-group">
+          <input class="form-input" type="number" id="age" placeholder="25" min="13" max="80">
+          <span class="input-unit">歳</span>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-row">
+          <label class="form-label" for="weight">体重<span class="form-required">*</span></label>
+          <div class="input-group">
+            <input class="form-input" type="number" id="weight" placeholder="65" min="30" max="200" step="0.1">
+            <span class="input-unit">kg</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="height">身長<span class="form-required">*</span></label>
+          <div class="input-group">
+            <input class="form-input" type="number" id="height" placeholder="170" min="130" max="220">
+            <span class="input-unit">cm</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">体脂肪率（目安でOK）</label>
+        <div id="bfd" class="range-display">20%</div>
+        <input type="range" id="bodyfat" min="5" max="50" value="20" oninput="updateBF()">
+        <div class="range-labels"><span>5%（低）</span><span>50%（高）</span></div>
+        <div id="bfIndicator" class="bf-indicator bf-normal">✅ 標準範囲</div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">トレーニング経験<span class="form-required">*</span></label>
+        <div class="option-grid">
+          <div class="option-card" data-g="experience" data-v="beginner" onclick="sel(this)">
+            <div class="option-title">🌱 初心者</div><div class="option-sub">3ヶ月以下</div>
+          </div>
+          <div class="option-card" data-g="experience" data-v="intermediate" onclick="sel(this)">
+            <div class="option-title">💪 中級者</div><div class="option-sub">3ヶ月〜2年未満</div>
+          </div>
+          <div class="option-card" data-g="experience" data-v="advanced" onclick="sel(this)">
+            <div class="option-title">🔥 上級者</div><div class="option-sub">2年以上</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-nav">
+        <button class="btn btn-secondary" onclick="gotoStep(0)">← 戻る</button>
+        <button class="btn btn-primary" onclick="validateStep1()">次へ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: SKELETON -->
+  <div class="step" id="step-2">
+    <div class="card">
+      <div class="card-title">🦴 骨格タイプ診断</div>
+      <div class="card-sub" id="skelSub">あなたの骨格タイプを診断します。最も当てはまる選択肢を選んでください</div>
+      <div id="skelContainer"></div>
+      <div class="tip-box" style="margin-top:16px">
+        <span class="ti">💡</span>
+        <span>骨格タイプはトレーニングで重点的に鍛えるべき部位や種目の選定に活用されます。直感で選んでいただいても構いません。</span>
+      </div>
+      <div class="btn-nav">
+        <button class="btn btn-secondary" onclick="gotoStep(1)">← 戻る</button>
+        <button class="btn btn-primary" onclick="calcSkeletonNext()">次へ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: CONSTRAINTS -->
+  <div class="step" id="step-3">
+    <div class="card">
+      <div class="card-title">⏰ トレーニング制約</div>
+      <div class="card-sub">週の利用可能な時間を教えてください</div>
+
+      <div class="form-row">
+        <label class="form-label">週に何日トレーニングできますか？<span class="form-required">*</span></label>
+        <div id="dpwD" class="range-display">3日</div>
+        <input type="range" id="daysPerWeek" min="1" max="7" value="3" oninput="updateDays()">
+        <div class="range-labels"><span>1日</span><span>7日</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-row">
+        <label class="form-label">1日に使える時間は？<span class="form-required">*</span></label>
+        <div id="hpdD" class="range-display">1.0時間</div>
+        <input type="range" id="hoursPerDay" min="0.5" max="3" value="1" step="0.5" oninput="updateHours()">
+        <div class="range-labels"><span>30分</span><span>3時間</span></div>
+      </div>
+
+      <div class="tip-box">
+        <span class="ti">💡</span>
+        <span>週<span id="tipD">3</span>日・1日<span id="tipH">1.0</span>時間のプランを作成します。無理なく続けられる範囲で設定しましょう。</span>
+      </div>
+
+      <div class="btn-nav">
+        <button class="btn btn-secondary" onclick="gotoStep(2)">← 戻る</button>
+        <button class="btn btn-primary" onclick="gotoStep(4)">次へ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: PURPOSE -->
+  <div class="step" id="step-4">
+    <div class="card">
+      <div class="card-title">🎯 トレーニング目的</div>
+      <div class="card-sub">あなたの主な目的を選んでください</div>
+      <div id="alert-4" class="alert"></div>
+      <div class="option-grid cols2">
+        <div class="option-card" data-g="purpose" data-v="hypertrophy" onclick="sel(this)">
+          <span class="option-icon">💪</span><div class="option-title">筋肥大</div><div class="option-sub">筋肉を大きく増やしたい</div>
+        </div>
+        <div class="option-card" data-g="purpose" data-v="diet" onclick="sel(this)">
+          <span class="option-icon">🔥</span><div class="option-title">ダイエット（減量）</div><div class="option-sub">体脂肪を減らして引き締めたい</div>
+        </div>
+        <div class="option-card" data-g="purpose" data-v="health" onclick="sel(this)">
+          <span class="option-icon">❤️</span><div class="option-title">健康維持</div><div class="option-sub">健康的な体を維持したい</div>
+        </div>
+        <div class="option-card" data-g="purpose" data-v="sports" onclick="sel(this)">
+          <span class="option-icon">⚡</span><div class="option-title">スポーツパフォーマンス向上</div><div class="option-sub">競技力・運動能力を高めたい</div>
+        </div>
+      </div>
+      <div class="btn-nav">
+        <button class="btn btn-secondary" onclick="gotoStep(3)">← 戻る</button>
+        <button class="btn btn-primary" onclick="validateStep4()">次へ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: IDEAL BODY -->
+  <div class="step" id="step-5">
+    <div class="card">
+      <div class="card-title">📸 理想の体型を選んでください</div>
+      <div class="card-sub" id="photoSub">目的に合わせた体型の選択肢を表示します</div>
+      <div id="alert-5" class="alert"></div>
+      <div id="photoContainer"></div>
+      <div class="tip-box" style="margin-top:14px">
+        <span class="ti">📷</span>
+        <span>あなたの目標に最も近い体型を選んでください。この選択はメニューの強度設定に反映されます。</span>
+      </div>
+      <div class="btn-nav">
+        <button class="btn btn-secondary" onclick="gotoStep(4)">← 戻る</button>
+        <button class="btn btn-primary" onclick="validateStep5()">メニューを作成する 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP RESULT -->
+  <div class="step" id="step-result">
+    <div id="resultContainer"></div>
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="gotoStep(5)">← やり直す</button>
+      <button class="btn btn-accent" onclick="window.print()">📥 印刷 / PDF保存</button>
+    </div>
+  </div>
+
+</div>
+
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== STATE =====
+const S = {
+  gender:null, age:null, weight:null, height:null, bodyfat:20, experience:null,
+  skelAnswers:{}, skelType:null, daysPerWeek:3, hoursPerDay:1.0,
+  purpose:null, idealBody:null
+};
+
+// ===== STEPS CONFIG =====
+const STEPS = ['step-0','step-1','step-2','step-3','step-4','step-5','step-result'];
+let currentStep = 0;
+
+// ===== THEME =====
+function openTheme() { document.getElementById('themeModal').classList.add('open'); }
+function closeTheme() { document.getElementById('themeModal').classList.remove('open'); }
+function applyTheme(t, el) {
+  document.body.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+  document.querySelectorAll('.theme-opt').forEach(o => o.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+function initTheme() {
+  const t = localStorage.getItem('theme') || 'dark';
+  document.body.setAttribute('data-theme', t);
+  const el = document.querySelector(`[data-theme="${t}"].theme-opt`);
+  if (el) el.classList.add('active');
+}
+
+// ===== STEP NAVIGATION =====
+function gotoStep(n) {
+  document.getElementById(STEPS[currentStep]).classList.remove('active');
+  currentStep = n;
+  document.getElementById(STEPS[currentStep]).classList.add('active');
+  const prog = document.getElementById('progressWrap');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+  if (n === 0) {
+    prog.style.display = 'none';
+  } else {
+    prog.style.display = 'block';
+    const pct = ((n) / (STEPS.length - 1)) * 100;
+    fill.style.width = pct + '%';
+    label.textContent = `ステップ ${n} / ${STEPS.length - 2}`;
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+  if (n === 2) renderSkelQ();
+  if (n === 5) renderPhotos();
+  if (n === 6) renderResult();
+}
+
+// ===== OPTION SELECT =====
+function sel(el) {
+  const g = el.dataset.g;
+  document.querySelectorAll(`[data-g="${g}"]`).forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  S[g] = el.dataset.v;
+}
+
+// ===== ALERT =====
+function showAlert(id, msg) {
+  const el = document.getElementById('alert-' + id);
+  if (!el) return;
+  el.textContent = '⚠️ ' + msg;
+  el.className = 'alert alert-error';
+}
+
+// ===== BODY FAT INDICATOR =====
+const BF_RANGES = {
+  male:   [{max:10,cls:'bf-low',txt:'▼ 低め（アスリートレベル）'},{max:20,cls:'bf-normal',txt:'✅ 標準範囲'},{max:25,cls:'bf-high',txt:'⚠️ やや高め'},{max:99,cls:'bf-very-high',txt:'🔴 高め（改善推奨）'}],
+  female: [{max:17,cls:'bf-low',txt:'▼ 低め（アスリートレベル）'},{max:25,cls:'bf-normal',txt:'✅ 標準範囲'},{max:30,cls:'bf-high',txt:'⚠️ やや高め'},{max:99,cls:'bf-very-high',txt:'🔴 高め（改善推奨）'}]
+};
+const BF_SOURCE = {
+  male:   '参考：男性の平均体脂肪率は10〜20%（日本赤十字社データ）',
+  female: '参考：女性の平均体脂肪率は17〜25%（日本赤十字社データ）'
+};
+function updateBF() {
+  const v = parseInt(document.getElementById('bodyfat').value);
+  S.bodyfat = v;
+  document.getElementById('bfd').textContent = v + '%';
+  const g = S.gender || 'male';
+  const ranges = BF_RANGES[g];
+  const ind = document.getElementById('bfIndicator');
+  for (const r of ranges) {
+    if (v < r.max) {
+      ind.className = 'bf-indicator ' + r.cls;
+      ind.textContent = r.txt + ' — ' + BF_SOURCE[g];
+      break;
+    }
+  }
+}
+
+// ===== RANGE UPDATE =====
+function updateDays() {
+  const v = parseInt(document.getElementById('daysPerWeek').value);
+  S.daysPerWeek = v;
+  document.getElementById('dpwD').textContent = v + '日';
+  document.getElementById('tipD').textContent = v;
+}
+function updateHours() {
+  const v = parseFloat(document.getElementById('hoursPerDay').value);
+  S.hoursPerDay = v;
+  document.getElementById('hpdD').textContent = v.toFixed(1) + '時間';
+  document.getElementById('tipH').textContent = v.toFixed(1);
+}
+
+// ===== VALIDATE STEP 1 =====
+function validateStep1() {
+  const age = parseInt(document.getElementById('age').value);
+  const weight = parseFloat(document.getElementById('weight').value);
+  const height = parseInt(document.getElementById('height').value);
+  if (!S.gender)           { showAlert(1,'性別を選択してください。'); return; }
+  if (!age||age<13||age>80) { showAlert(1,'有効な年齢を入力してください（13〜80歳）。'); return; }
+  if (!weight||weight<30)  { showAlert(1,'有効な体重を入力してください。'); return; }
+  if (!height||height<130) { showAlert(1,'有効な身長を入力してください。'); return; }
+  if (!S.experience)       { showAlert(1,'トレーニング経験を選択してください。'); return; }
+  S.age = age; S.weight = weight; S.height = height;
+  S.bodyfat = parseInt(document.getElementById('bodyfat').value);
+  saveProfile();
+  gotoStep(2);
+}
+
+// ===== SKELETON DIAGNOSIS =====
+const SKEL_M = [
+  { id:'sm1', q:'骨格・骨のフレームの大きさは？', opts:[{l:'細め・華奢',v:'wave'},{l:'標準的',v:'straight'},{l:'がっしり・大きい',v:'natural'}] },
+  { id:'sm2', q:'肩幅の広さはどのくらいですか？', opts:[{l:'肩幅が狭い、なで肩',v:'wave'},{l:'肩幅は標準',v:'straight'},{l:'肩幅が広い、いかり肩',v:'natural'}] },
+  { id:'sm3', q:'胸板・体の厚みはどうですか？', opts:[{l:'薄い・平らに見える',v:'wave'},{l:'程よい厚みがある',v:'straight'},{l:'かなり厚みがある・立体感',v:'natural'}] },
+  { id:'sm4', q:'体のシルエット（正面から見た時）は？', opts:[{l:'下半身に重心がある（洋梨型）',v:'wave'},{l:'上下ほぼ均等（長方形型）',v:'straight'},{l:'上半身が大きく逆三角形型',v:'natural'}] },
+  { id:'sm5', q:'手首・足首の関節の太さは？', opts:[{l:'細く華奢',v:'wave'},{l:'普通',v:'straight'},{l:'太くしっかりしている',v:'natural'}] }
+];
+const SKEL_F = [
+  { id:'sf1', q:'骨・関節の細さ・大きさは？', opts:[{l:'細く繊細な骨格',v:'wave'},{l:'普通の太さ',v:'straight'},{l:'骨や関節がしっかりしている',v:'natural'}] },
+  { id:'sf2', q:'肩のラインと形は？', opts:[{l:'なで肩・柔らかい丸み',v:'wave'},{l:'水平に近い標準',v:'straight'},{l:'肩の骨が目立ち角張っている',v:'natural'}] },
+  { id:'sf3', q:'バストの位置と質感は？', opts:[{l:'丸みがあり下に位置している',v:'wave'},{l:'ハリがあり上に位置している',v:'straight'},{l:'ボリュームがありバランスが良い',v:'natural'}] },
+  { id:'sf4', q:'ウエストとヒップのバランスは？', opts:[{l:'ウエストよりヒップが大きめ',v:'wave'},{l:'ウエストとヒップが均等',v:'straight'},{l:'ウエストの差が少なく骨盤が大きい',v:'natural'}] },
+  { id:'sf5', q:'体の質感・印象は？', opts:[{l:'柔らかくふんわりとした印象',v:'wave'},{l:'筋肉がつきやすくハリがある',v:'straight'},{l:'骨格が大きく存在感がある',v:'natural'}] }
+];
+
+function renderSkelQ() {
+  const data = S.gender === 'female' ? SKEL_F : SKEL_M;
+  const c = document.getElementById('skelContainer');
+  c.innerHTML = '';
+  document.getElementById('skelSub').textContent = S.gender === 'female'
+    ? '女性の骨格タイプ（ナチュラル・ストレート・ウェーブ）を診断します'
+    : '男性の骨格タイプ（ナチュラル・ストレート・ウェーブ）を診断します';
+  // Pre-fill if already answered
+  data.forEach(q => {
+    const prev = S.skelAnswers[q.id];
+    const div = document.createElement('div');
+    div.className = 'skel-q';
+    div.innerHTML = `<div class="skel-q-title">${q.q}</div>
+      <div class="skel-opts">${q.opts.map(o=>`
+        <div class="skel-opt${prev===o.v?' selected':''}" data-qid="${q.id}" data-val="${o.v}" onclick="selSkel(this)">${o.l}</div>
+      `).join('')}</div>`;
+    c.appendChild(div);
+  });
+}
+
+function selSkel(el) {
+  const qid = el.dataset.qid;
+  document.querySelectorAll(`[data-qid="${qid}"]`).forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  S.skelAnswers[qid] = el.dataset.val;
+}
+
+function calcSkeletonNext() {
+  const data = S.gender === 'female' ? SKEL_F : SKEL_M;
+  const missing = data.filter(q => !S.skelAnswers[q.id]);
+  if (missing.length) { alert('⚠️ すべての質問に回答してください。'); return; }
+  const cnt = {natural:0, straight:0, wave:0};
+  Object.values(S.skelAnswers).forEach(v => cnt[v]++);
+  S.skelType = Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0];
+  saveProfile();
+  gotoStep(3);
+}
+
+// ===== PHOTO GRID =====
+// Google Drive thumbnail URL
+function driveImg(id) { return `https://drive.google.com/thumbnail?id=${id}&sz=w400`; }
+
+const PHOTOS = {
+  hypertrophy: {
+    male:   [
+      { id:'m-h1', img:driveImg('1FM-vBvU-XFNMsliiAG6IJxZewElVrQd7'), title:'筋肉量：少', desc:'引き締まった標準的な体型' },
+      { id:'m-h2', img:driveImg('1Qay9Cy3piOsbiqhFWgImXOgz7I9KME56'), title:'筋肉量：中', desc:'バランスの良い筋肉体型' },
+      { id:'m-h3', img:driveImg('1Ie-rTp37H0qMo9Bz7SkfS5c0dwpRm2LI'), title:'筋肉量：大', desc:'がっしりとした筋肉質な体型' }
+    ],
+    female: [
+      { id:'f-h1', img:driveImg('1z2un7ZT-B9jlc1rqltu_OAbnmfSNNOi_'), title:'筋肉量：少', desc:'引き締まったスリムな体型' },
+      { id:'f-h2', img:driveImg('1OjQOxPQxiLst5uZdCkcQJ6BNBftdmJUv'), title:'筋肉量：中', desc:'程よく筋肉のついた体型' },
+      { id:'f-h3', img:driveImg('1cIY-glvVhTh1Sf2qChl6-v60EhssJRn-'), title:'筋肉量：大', desc:'しっかり鍛えられた体型' }
+    ]
+  },
+  diet: {
+    male:   [
+      { id:'m-d1', img:driveImg('19Y-bredYnXkfFbIj-BQGK6Qx0YS-4IC0'), title:'標準体型', desc:'無理なく引き締まった体型' },
+      { id:'m-d2', img:driveImg('1UBch6ViltdZxonogwapuK1r7k76k9En4'), title:'スリム体型', desc:'シャープで低体脂肪な体型' }
+    ],
+    female: [
+      { id:'f-d1', img:driveImg('1xf2HW7VlFaeB9lizA124MUr-SrYCoYPO'), title:'標準体型', desc:'バランスよく引き締まった体型' },
+      { id:'f-d2', img:driveImg('1dt6s8S3FSFv9IxkQ0VnnL_-1JkaGnu5N'), title:'スリム体型', desc:'スリムで体脂肪を落とした体型' }
+    ]
+  },
+  health: {
+    male:   [
+      { id:'m-hh1', img:driveImg('1TI_6cnjN7VpUa76OMN9AG1KI7NToU71h'), title:'健康体型A', desc:'バランスの良い健康体型' },
+      { id:'m-hh2', img:driveImg('1LdDwze1yt5qDzVvx1ILtbbu7aMIJ1dZE'), title:'健康体型B', desc:'スリムで活動的な体型' }
+    ],
+    female: [
+      { id:'f-hh1', img:driveImg('150foRL3pRx4WITxcZW1H8JnWDBvSL4uu'), title:'健康体型A', desc:'バランスの良い健康体型' },
+      { id:'f-hh2', img:driveImg('1XfGSAC3oJk-RIsHDuw1DVr_2W4W75Aa7'), title:'健康体型B', desc:'活動的でスリムな体型' }
+    ]
+  },
+  sports: {
+    male:   [
+      { id:'m-sp1', img:driveImg('186OXaSZ-W7z2ZqyIJXI4NTL3Llys8Rex'), title:'サッカー選手型', desc:'敏捷性とスタミナに優れた体型' },
+      { id:'m-sp2', img:driveImg('1vUUuuPVywVANXI2t1ShI6EUg2WDW6Zr3'), title:'ラグビー選手型', desc:'パワーと体格に優れた体型' },
+      { id:'m-sp3', img:driveImg('1qWmmTniPK9dztLpitGyt0O8wQrCxii27'), title:'陸上選手型', desc:'スピードと持久力に優れた体型' }
+    ],
+    female: [
+      { id:'f-sp1', img:driveImg('1S-dXTfa3iGiUEUa45MUtCmShAnQ5D6N8'), title:'バレーボール選手型', desc:'跳躍力と持久力に優れた体型' },
+      { id:'f-sp2', img:driveImg('1kxv_AqIB2Ie-sTE5qHTzjm3U_3b5ZITO'), title:'フィギュア選手型', desc:'柔軟性とバランスに優れた体型' },
+      { id:'f-sp3', img:driveImg('1aMMFJ-Kr2QY3DV59NNPPB_mC3kJ-Ao7a'), title:'陸上選手型', desc:'スピードと持久力に優れた体型' }
+    ]
+  }
+};
+
+function renderPhotos() {
+  const g = S.gender || 'male';
+  const photos = PHOTOS[S.purpose][g];
+  const cols = photos.length === 2 ? 'cols2' : 'cols3';
+  document.getElementById('photoSub').textContent =
+    `目的に合った体型の選択肢です — あなたの理想に最も近いものを選んでください（${S.gender === 'female' ? '女性' : '男性'}）`;
+  document.getElementById('photoContainer').innerHTML =
+    `<div class="photo-grid ${cols}">
+      ${photos.map(p=>`
+        <div class="photo-card${S.idealBody===p.id?' selected':''}" data-pid="${p.id}" onclick="selPhoto(this)">
+          <div class="photo-img-wrap">
+            <img src="${p.img}" alt="${p.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="photo-fallback" style="display:none">🏃</div>
+            <div class="photo-check">✓</div>
+          </div>
+          <div class="photo-label">
+            <div class="ptitle">${p.title}</div>
+            <div class="pdesc">${p.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+function selPhoto(el) {
+  document.querySelectorAll('.photo-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  S.idealBody = el.dataset.pid;
+}
+
+function validateStep4() {
+  if (!S.purpose) { showAlert(4,'目的を選択してください。'); return; }
+  gotoStep(5);
+}
+function validateStep5() {
+  if (!S.idealBody) { showAlert(5,'理想の体型を選択してください。'); return; }
+  gotoStep(6);
+}
+
+// ===== YOUTUBE LINKS =====
+const YT = {
+  'スクワット':                'https://m.youtube.com/shorts/v585xCrfn20',
+  'ブルガリアンスクワット':    'https://m.youtube.com/shorts/2JFyKWAjM6I',
+  'デッドリフト':              'https://m.youtube.com/shorts/Pqf7fS5OFww',
+  '懸垂':                      'https://m.youtube.com/shorts/EhQeBHP7rjE',
+  'ラットプルダウン':          'https://m.youtube.com/shorts/QMuhF1Z6WwA',
+  'ダンベルロウ':              'https://m.youtube.com/shorts/0LY1bGPPsRk',
+  'サイドレイズ':              'https://m.youtube.com/shorts/-bvP-lzw6X0',
+  'ショルダープレス':          'https://m.youtube.com/shorts/IH24_ohO4Jc',
+  'ライイングエクステンション':'https://m.youtube.com/shorts/MI3UDh0UKjc',
+  'アブローラー':              'https://m.youtube.com/shorts/l9Av2iBsn1Y',
+  'バーベルカール':            'https://m.youtube.com/shorts/fOgnS18q1lI',
+  'ベンチプレス':              'https://www.youtube.com/results?search_query=正しいベンチプレス+5つのポイント+筋トレ',
+  'ダンベルベンチプレス':      'https://www.youtube.com/results?search_query=正しいダンベルベンチプレス5つのポイント+筋トレ',
+  'ダンベルフライ':            'https://www.youtube.com/results?search_query=正しいダンベルフライ4つのポイント+筋トレ',
+  'ケーブルフライ':            'https://www.youtube.com/results?search_query=ケーブルフライ+正しいやり方+筋トレ',
+  'ディップス':                'https://www.youtube.com/results?search_query=正しいディップスのやり方+筋トレ',
+  'プランク':                  'https://www.youtube.com/results?search_query=プランク+正しいやり方+体幹トレーニング',
+  'トレッドミル':              'https://www.youtube.com/results?search_query=トレッドミル+正しい走り方',
+  'ジャンプスクワット':        'https://www.youtube.com/results?search_query=ジャンプスクワット+やり方',
+  'アブドミナルクランチ':      'https://www.youtube.com/results?search_query=アブドミナルクランチ+正しいやり方',
+  'ストレッチ':                'https://www.youtube.com/results?search_query=全身ストレッチ+トレーニング後',
+};
+function ytBtn(name) {
+  const url = YT[name];
+  if (!url) return '';
+  return `<a class="yt-link" href="${url}" target="_blank" title="${name}のフォーム解説動画">▶<span style="font-size:8px">YT</span></a>`;
+}
+
+// ===== EXERCISE ICONS =====
+const EX_ICONS = {
+  'ベンチプレス':'🏋️','ダンベルベンチプレス':'🏋️','インクラインベンチプレス':'🏋️',
+  'ダンベルフライ':'🙌','ケーブルフライ':'🔄','ディップス':'⬇️','プッシュアップ':'💪',
+  'スクワット':'🦵','ブルガリアンスクワット':'🦵','ジャンプスクワット':'⬆️',
+  'レッグプレス':'🦵','レッグプレス・マシン':'🦵','レッグエクステンション':'🦵','レッグカール':'🦵','カーフレイズ':'🦵',
+  'デッドリフト':'🏋️','バーベルロウ':'🔄','ダンベルロウ':'🔄','ラットプルダウン':'⬇️','懸垂':'🤸','シーテッドロウ':'🪑',
+  'ショルダープレス':'💪','サイドレイズ':'🙌','フロントレイズ':'💪',
+  'バーベルカール':'💪','ダンベルカール':'💪','ハンマーカール':'🔨','ライイングエクステンション':'💪','トライセップスプッシュダウン':'⬇️',
+  'トレッドミル':'🏃','アブドミナルクランチ':'🔧','アブローラー':'🔧','プランク':'🔧','ケーブル・アンチローテーション':'⚡',
+  'ストレッチ':'🧘','ファーマーズウォーク':'🚶'
+};
+function exIcon(n) {
+  for (const [k,v] of Object.entries(EX_ICONS)) { if (n.includes(k)) return v; }
+  return '🏋️';
+}
+
+// ===== MENU GENERATION =====
+// Rep schemes based on purpose + experience
+// Source: scientific literature and referenced fitness blogs
+const REP_SCHEMES = {
+  hypertrophy: {
+    beginner:     { sets:3, reps:'10〜12回', rest:'60〜90秒', note:'正しいフォームを習得しながら中重量で筋肥大を刺激する' },
+    intermediate: { sets:4, reps:'8〜10回',  rest:'90秒',     note:'漸進的過負荷で筋肥大・筋力向上を同時に狙う' },
+    advanced:     { sets:5, reps:'6〜8回',   rest:'2〜3分',   note:'高重量・高強度で最大筋肥大・神経系強化を追求する' }
+  },
+  diet: {
+    beginner:     { sets:3, reps:'15〜20回', rest:'30〜45秒', note:'軽重量・高回数・短インターバルで代謝を高める' },
+    intermediate: { sets:3, reps:'12〜15回', rest:'45〜60秒', note:'筋肉を維持しながら高回数で脂肪燃焼を促進する' },
+    advanced:     { sets:4, reps:'12〜15回', rest:'30〜45秒', note:'サーキット形式で心拍を上げ、脂肪燃焼効率を最大化する' }
+  },
+  health: {
+    beginner:     { sets:2, reps:'12〜15回', rest:'60秒',     note:'全身を無理なく鍛え、健康的な習慣を身につける' },
+    intermediate: { sets:3, reps:'10〜12回', rest:'60秒',     note:'バランスよく全身を鍛え、健康を長期的に維持する' },
+    advanced:     { sets:3, reps:'10〜12回', rest:'60〜90秒', note:'体力と筋力を維持しながら健康的な体を保つ' }
+  },
+  sports: {
+    beginner:     { sets:3, reps:'6〜10回',  rest:'90秒',     note:'基礎体力と動作の質を高めながら競技力を向上させる' },
+    intermediate: { sets:4, reps:'4〜6回',   rest:'2〜3分',   note:'最大筋力と爆発力を鍛える高強度トレーニング' },
+    advanced:     { sets:5, reps:'3〜5回',   rest:'3〜4分',   note:'最大パワーと神経系の適応でスポーツパフォーマンスを極限まで高める' }
+  }
+};
+
+const EX_LIBRARY = {
+  hypertrophy: {
+    chest:    ['ベンチプレス','インクラインベンチプレス','ダンベルフライ','ケーブルフライ','ディップス'],
+    shoulder: ['ショルダープレス','サイドレイズ','フロントレイズ'],
+    back:     ['懸垂','ラットプルダウン','バーベルロウ','ダンベルロウ','シーテッドロウ'],
+    arm:      ['バーベルカール','ダンベルカール','ライイングエクステンション','トライセップスプッシュダウン'],
+    leg:      ['スクワット','レッグプレス・マシン','レッグエクステンション','レッグカール','カーフレイズ'],
+    core:     ['アブローラー','プランク']
+  },
+  diet: {
+    cardio: ['トレッドミル'],
+    leg:    ['レッグプレス・マシン','スクワット','レッグエクステンション','レッグカール'],
+    core:   ['アブドミナルクランチ','アブローラー','プランク'],
+    chest:  ['プッシュアップ','ダンベルベンチプレス'],
+    back:   ['ラットプルダウン','ダンベルロウ']
+  },
+  health: {
+    cardio:   ['トレッドミル'],
+    chest:    ['ベンチプレス','プッシュアップ'],
+    back:     ['懸垂','ラットプルダウン'],
+    leg:      ['スクワット','レッグプレス・マシン'],
+    shoulder: ['ショルダープレス','サイドレイズ'],
+    stretch:  ['ストレッチ']
+  },
+  sports: {
+    cardio: ['トレッドミル'],
+    core:   ['アブドミナルクランチ','ケーブル・アンチローテーション','アブローラー','プランク'],
+    leg:    ['ジャンプスクワット','ブルガリアンスクワット','デッドリフト','スクワット'],
+    power:  ['デッドリフト','ファーマーズウォーク']
+  }
+};
+
+function pickEx(arr, n) { return arr.slice(0, n); }
+
+const PURPOSE_NOTES = {
+  hypertrophy: '高強度の筋トレによる筋肥大・神経系強化を目的としています。漸進的過負荷（重量・回数を徐々に増やす）の原則に従い、週ごとに少しずつ重量を増やしましょう。',
+  diet:        '有酸素運動による脂肪燃焼と、筋力トレーニングによる基礎代謝向上を組み合わせたプランです。食事管理も並行して行いましょう。',
+  health:      '全身をまんべんなく低〜中強度で鍛え、有酸素運動でスタミナを向上させるバランス型のプランです。継続することが最大のポイントです。',
+  sports:      'スポーツに必要な体幹・爆発力・アジリティの強化と、有酸素によるスタミナ向上を両立したプランです。'
+};
+
+function buildDayPlans() {
+  const { purpose, experience, hoursPerDay, daysPerWeek } = S;
+  const lib = EX_LIBRARY[purpose];
+  const maxEx = hoursPerDay >= 1.5 ? 5 : 4;
+  const cardioLabel = hoursPerDay >= 1.5 ? '（30分）' : '（20分）';
+  const plans = [];
+
+  if (purpose === 'hypertrophy') {
+    const patterns = [
+      [['chest','shoulder'],'胸・肩'],
+      [['back','arm'],'背中・腕'],
+      [['leg','core'],'脚・体幹'],
+      [['chest','arm'],'胸・腕'],
+      [['back','shoulder'],'背中・肩'],
+      [['leg'],'脚'],
+      [['core','shoulder'],'体幹・肩']
+    ];
+    for (let i=0; i<daysPerWeek; i++) {
+      const pat = patterns[i % patterns.length];
+      const exs = pat[0].flatMap(g => pickEx(lib[g]||[], 3)).slice(0, maxEx);
+      plans.push({ label:pat[1], exercises:exs });
+    }
+  } else if (purpose === 'diet') {
+    const patterns = [
+      [['cardio','leg'],'有酸素・脚'],
+      [['cardio','core'],'有酸素・腹筋'],
+      [['cardio','chest'],'有酸素・胸'],
+      [['cardio','back'],'有酸素・背中'],
+      [['cardio','leg'],'有酸素・脚（再）'],
+      [['cardio','core'],'有酸素・体幹'],
+      [['cardio','chest'],'有酸素・全身']
+    ];
+    for (let i=0; i<daysPerWeek; i++) {
+      const pat = patterns[i % patterns.length];
+      const exs = pat[0].flatMap(g => pickEx(lib[g]||[], g==='cardio'?1:3)).slice(0, maxEx);
+      plans.push({ label:pat[1], exercises:exs });
+    }
+  } else if (purpose === 'health') {
+    const patterns = [
+      [['cardio','chest','stretch'],'有酸素・胸'],
+      [['cardio','back','stretch'],'有酸素・背中'],
+      [['cardio','leg','stretch'],'有酸素・脚'],
+      [['cardio','shoulder','stretch'],'有酸素・肩'],
+      [['cardio','chest','stretch'],'有酸素・上半身'],
+      [['cardio','leg','stretch'],'有酸素・下半身'],
+      [['cardio','back','stretch'],'有酸素・全身']
+    ];
+    for (let i=0; i<daysPerWeek; i++) {
+      const pat = patterns[i % patterns.length];
+      const exs = pat[0].flatMap(g => pickEx(lib[g]||[], g==='cardio'||g==='stretch'?1:2));
+      plans.push({ label:pat[1], exercises:exs });
+    }
+  } else if (purpose === 'sports') {
+    const patterns = [
+      [['cardio','core'],'有酸素・体幹'],
+      [['cardio','leg'],'有酸素・脚'],
+      [['cardio','core'],'有酸素・体幹（再）'],
+      [['cardio','leg','power'],'有酸素・脚・パワー'],
+      [['cardio','core','leg'],'有酸素・体幹・脚'],
+      [['cardio','power'],'有酸素・パワートレーニング'],
+      [['cardio','leg','core'],'有酸素・脚・体幹']
+    ];
+    for (let i=0; i<daysPerWeek; i++) {
+      const pat = patterns[i % patterns.length];
+      const exs = pat[0].flatMap(g => pickEx(lib[g]||[], g==='cardio'?1:2)).slice(0, maxEx);
+      plans.push({ label:pat[1], exercises:exs });
+    }
+  }
+  return { plans, cardioLabel };
+}
+
+function renderResult() {
+  const { plans, cardioLabel } = buildDayPlans();
+  const scheme = REP_SCHEMES[S.purpose][S.experience];
+  const bmi = (S.weight / Math.pow(S.height/100, 2)).toFixed(1);
+  const trainDays = plans.length;
+  const cycleDays = trainDays <= 3 ? 3 : trainDays <= 5 ? 5 : 7;
+  const skelLabels = {natural:'ナチュラル', straight:'ストレート', wave:'ウェーブ'};
+  const purpLabels  = {hypertrophy:'筋肥大', diet:'ダイエット', health:'健康維持', sports:'スポーツ向上'};
+  const expLabels   = {beginner:'初心者', intermediate:'中級者', advanced:'上級者'};
+
+  // Interleave rest days
+  const allDays = [];
+  let ti = 0;
+  for (let i=0; i<cycleDays; i++) {
+    if (ti < trainDays && ((i * trainDays) / cycleDays >= ti || i === Math.floor(i * cycleDays / trainDays))) {
+      allDays.push({ type:'train', ...plans[ti++] });
+    } else {
+      allDays.push({ type:'rest' });
+    }
+  }
+  while (allDays.filter(d=>d.type==='train').length < trainDays) {
+    allDays.push({ type:'train', ...plans[ti++] });
+  }
+
+  let html = `
+    <div class="result-hero">
+      <h2>🎉 トレーニングメニューが完成しました！</h2>
+      <p>${cycleDays}日サイクル・週${trainDays}日のプランです</p>
+      <div class="badges">
+        <span class="badge badge-p">🎯 ${purpLabels[S.purpose]}</span>
+        <span class="badge badge-a">🦴 ${skelLabels[S.skelType]||'-'}</span>
+        <span class="badge badge-s">💪 ${expLabels[S.experience]}</span>
+        <span class="badge">📅 週${trainDays}日</span>
+        <span class="badge">⏱️ 1日${S.hoursPerDay.toFixed(1)}時間</span>
+        <span class="badge">♀♂ ${S.gender==='female'?'女性':'男性'}</span>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">${S.weight}kg</div>
+        <div class="stat-label">体重</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${bmi}</div>
+        <div class="stat-label">BMI</div>
+        <div class="stat-note" style="color:${parseFloat(bmi)<18.5?'#63b4ff':parseFloat(bmi)<25?'var(--success)':parseFloat(bmi)<30?'var(--warning)':'var(--danger)'}">${parseFloat(bmi)<18.5?'低体重':parseFloat(bmi)<25?'標準':parseFloat(bmi)<30?'過体重':'肥満'}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${S.bodyfat}%</div>
+        <div class="stat-label">体脂肪率</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px">
+      <div class="card-title" style="margin-bottom:10px">📌 プランのポイント</div>
+      <p style="font-size:13px;line-height:1.8;color:var(--text-muted)">${PURPOSE_NOTES[S.purpose]}</p>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <span class="badge badge-s">✅ ${scheme.sets}セット × ${scheme.reps}</span>
+        <span class="badge">⏸️ インターバル ${scheme.rest}</span>
+        <span class="badge badge-p">💡 ${scheme.note}</span>
+      </div>
+    </div>
+  `;
+
+  allDays.forEach((day, i) => {
+    const dn = i + 1;
+    if (day.type === 'rest') {
+      html += `<div class="day-block">
+        <div class="day-hdr">
+          <div class="day-num" style="background:linear-gradient(135deg,#444,#333)">D${dn}</div>
+          <div class="day-info"><h3>Day ${dn}：休息日</h3><p>回復を促しましょう</p></div>
+        </div>
+        <div class="rest-day">🛌 アクティブレスト — 軽いストレッチや散歩が効果的です</div>
+      </div>`;
+    } else {
+      const exs = day.exercises || [];
+      html += `<div class="day-block">
+        <div class="day-hdr">
+          <div class="day-num">D${dn}</div>
+          <div class="day-info"><h3>Day ${dn}：${day.label}</h3><p>${exs.length}種目 · ${scheme.sets}セット × ${scheme.reps}</p></div>
+        </div>
+        <div class="exercise-list">
+          ${exs.map(ex => {
+            let r = scheme.reps, ss = scheme.sets;
+            if (ex === 'トレッドミル') { r = S.hoursPerDay>=1.5?'30分':'20分'; ss=1; }
+            else if (ex === 'ストレッチ') { r='5〜10分'; ss=1; }
+            else if (ex === 'プランク') { r='30〜60秒'; ss=3; }
+            else if (ex === 'アブローラー') { r='10〜15回'; ss=3; }
+            return `<div class="exercise-item">
+              <div class="ex-icon">${exIcon(ex)}</div>
+              <div class="ex-name">${ex}</div>
+              <div class="ex-reps">${ss}×${r}</div>
+              ${ytBtn(ex)}
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="purpose-note">${PURPOSE_NOTES[S.purpose].split('。')[0]}。</div>
+      </div>`;
+    }
+  });
+
+  html += `<div class="card">
+    <div class="card-title" style="margin-bottom:12px">💡 成功させるコツ</div>
+    <div style="display:grid;gap:8px">
+      <div class="tip-box"><span class="ti">🔥</span><span>ウォームアップは必ず行う。5〜10分の有酸素とダイナミックストレッチが効果的です。</span></div>
+      <div class="tip-box"><span class="ti">💧</span><span>水分補給を忘れずに。トレーニング前・中・後に水または電解質ドリンクを。</span></div>
+      <div class="tip-box"><span class="ti">🍗</span><span>タンパク質を毎食意識。目安は体重×1.6〜2.0g/日（あなたの場合：${Math.round(S.weight*1.8)}g/日）。</span></div>
+      <div class="tip-box"><span class="ti">😴</span><span>睡眠7〜9時間を目標に。成長ホルモンは睡眠中に最も多く分泌されます。</span></div>
+      <div class="tip-box"><span class="ti">📈</span><span>2〜3週ごとに重量か回数を少し増やす「漸進的過負荷」が筋肥大の鍵です。</span></div>
+    </div>
+  </div>`;
+
+  document.getElementById('resultContainer').innerHTML = html;
+}
+
+// ===== LOCAL STORAGE =====
+const LS_KEY = 'kintore_profile_v2';
+
+function saveProfile() {
+  const data = {
+    gender:S.gender, age:S.age, weight:S.weight, height:S.height,
+    bodyfat:S.bodyfat, experience:S.experience,
+    skelAnswers:S.skelAnswers, skelType:S.skelType,
+    savedAt: new Date().toISOString()
+  };
+  try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e){}
+}
+
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e) { return null; }
+}
+
+function checkSavedProfile() {
+  const p = loadProfile();
+  if (!p || !p.gender) return;
+  const banner = document.getElementById('savedBanner');
+  const tags = document.getElementById('savedTags');
+  const expL = {beginner:'初心者',intermediate:'中級者',advanced:'上級者'};
+  const gL = {male:'男性',female:'女性'};
+  tags.innerHTML = [
+    p.gender && `<span class="saved-tag">${gL[p.gender]||p.gender}</span>`,
+    p.age && `<span class="saved-tag">${p.age}歳</span>`,
+    p.weight && `<span class="saved-tag">${p.weight}kg</span>`,
+    p.height && `<span class="saved-tag">${p.height}cm</span>`,
+    p.bodyfat != null && `<span class="saved-tag">体脂肪 ${p.bodyfat}%</span>`,
+    p.experience && `<span class="saved-tag">${expL[p.experience]||p.experience}</span>`,
+  ].filter(Boolean).join('');
+  banner.classList.add('show');
+  document.getElementById('profileBtn').style.display = 'flex';
+}
+
+function useSavedProfile() {
+  const p = loadProfile();
+  if (!p) return;
+  Object.assign(S, p);
+  document.getElementById('savedBanner').classList.remove('show');
+  // Pre-fill step 1 form
+  if (p.gender) { const el = document.querySelector(`[data-g="gender"][data-v="${p.gender}"]`); if(el) el.classList.add('selected'); }
+  if (p.experience) { const el = document.querySelector(`[data-g="experience"][data-v="${p.experience}"]`); if(el) el.classList.add('selected'); }
+  if (p.age) document.getElementById('age').value = p.age;
+  if (p.weight) document.getElementById('weight').value = p.weight;
+  if (p.height) document.getElementById('height').value = p.height;
+  if (p.bodyfat != null) { document.getElementById('bodyfat').value = p.bodyfat; updateBF(); }
+  gotoStep(1);
+}
+
+function ignoreSaved() {
+  document.getElementById('savedBanner').classList.remove('show');
+  startFresh();
+}
+
+function startFresh() {
+  Object.assign(S, {gender:null,age:null,weight:null,height:null,bodyfat:20,experience:null,skelAnswers:{},skelType:null,daysPerWeek:3,hoursPerDay:1.0,purpose:null,idealBody:null});
+  gotoStep(1);
+}
+
+function openProfile() {
+  // Allow user to edit saved data by going back to step 1
+  const p = loadProfile();
+  if (p) Object.assign(S, p);
+  gotoStep(1);
+}
+
+// ===== INIT =====
+initTheme();
+updateBF();
+updateDays();
+updateHours();
+checkSavedProfile();
+document.getElementById('profileBtn').style.display = loadProfile() ? 'flex' : 'none';
+</script>
+
+</body>
+</html>
